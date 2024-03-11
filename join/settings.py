@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'join_backend'
 ]
 
 MIDDLEWARE = [
@@ -132,3 +135,11 @@ MEDIA_ROOT = '/home/Rafael/join/media'
 MEDIA_URL = '/media/'
 STATIC_ROOT = '/home/Rafael/join/static'
 STATIC_URL = '/static/'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHETICATION_CLASES': {
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
+    }
+}
