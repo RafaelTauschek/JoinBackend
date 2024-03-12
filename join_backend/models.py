@@ -28,11 +28,11 @@ class Subtask(models.Model):
     
 
 class Task(models.Model):
-    PRIORITY_CHOICES = {
-        "L": "Low",
-        "M": "Medium",
-        "U": "Urgent"
-    }
+    PRIORITY_CHOICES = [
+        ("L", "Low"),
+        ("M", "Medium"),
+        ("U", "Urgent")
+    ]
     STATUS_CHOICES = [
         ("TODO", "Todo"),
         ("PROGRESS", "Progress"),
