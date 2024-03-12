@@ -7,12 +7,14 @@ urlpatterns = [
     path('login/', LoginView.as_view()),
     path('register/', RegisterView.as_view()),
     path('tasks/', TaskView.as_view()),
-    path('tasks/<int:pk>', TaskView.as_view()),
+    path('tasks/<int:pk>/', TaskView.as_view()),
     path('contacts/', ContactView.as_view()),
-    path('contacts/<int:pk>', ContactView.as_view()),
+    path('contacts/<int:pk>/', ContactView.as_view()),
     path('subtasks/', SubtaskView.as_view()),
-    path('subtasks/<int:pk>', SubtaskView.as_view()),
+    path('subtasks/<int:pk>/', SubtaskView.as_view()),
     path('users/', UserView.as_view()),
-    path('users/<int:pk>', UserView.as_view()),
+    path('users/<int:pk>/', UserView.as_view()),
+    path('categorys/', CategoryView.as_view()),
+    path('categorys/<int:pk>/', CategoryView.as_view()),
 ]
 

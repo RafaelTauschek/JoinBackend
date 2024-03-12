@@ -81,6 +81,44 @@ class SubtaskView(APIView):
         return Response(stauts=status.HTTP_204_NO_CONTENT)
 
 
+
+class CategoryView(APIView):
+        authentication_classes = [TokenAuthentication]
+        permission_classes = [IsAuthenticated]
+        
+        def get(self, request, pk=None, format=None):
+            if pk:
+                category = get_object_or_404(Contact, pk=pk, author=request.user)
+                serializer = CategorySerializer(category)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                contacts = Contact.objects.all()
+                serializer = ContactSerializer(contacts, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+        def post(self, request, format=None):
+            serializer = CategorySerializer(data=request.data, context={"request": request})
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(author=request.user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        def put(self, request, pk, format=None):
+            instance = get_object_or_404(Category, pk=pk)
+            serializer = CategorySerializer(instance, data=request.data, context={"request": request})
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        def delete(self, request, pk, format=None):
+            instance = get_object_or_404(Category, pk=pk)
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        
+        
+
 class ContactView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -124,7 +162,7 @@ class LoginView(ObtainAuthToken):
         return Response({
             'token': token.key,
             'user_id': user.pk
-        })
+        }, status=status.HTTP_200_OK)
 
 class RegisterView(APIView):
     def post(self, request, *args, **kwargs):
@@ -144,7 +182,7 @@ class RegisterView(APIView):
             'token': token.key,
             'user_id': user.pk
         }, status=status.HTTP_201_CREATED)
-        
+            
         
 class UserView(APIView):
     authentication_classes = [TokenAuthentication]

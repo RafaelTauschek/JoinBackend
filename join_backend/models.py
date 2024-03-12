@@ -52,7 +52,7 @@ class Task(models.Model):
     prio = models.CharField(max_length=1, choices=PRIORITY_CHOICES, default="L")
     status = models.CharField(max_length=8, choices=STATUS_CHOICES, default="TODO")
     category = models.ForeignKey(Category, related_name='tasks', on_delete=models.PROTECT, null=True, blank=True)
-    subtasks = models.ManyToManyField(Subtask, null=True, blank=True)
+    subtasks = models.ManyToManyField(Subtask, blank=True)
 
     def __str__(self):
         return f'{self.id}: {self.title}'
