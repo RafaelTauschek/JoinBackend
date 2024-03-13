@@ -92,8 +92,8 @@ class CategoryView(APIView):
                 serializer = CategorySerializer(category)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                contacts = Contact.objects.all()
-                serializer = ContactSerializer(contacts, many=True)
+                category = Category.objects.all()
+                serializer = CategorySerializer(category, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
         def post(self, request, format=None):
