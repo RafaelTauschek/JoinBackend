@@ -40,6 +40,16 @@ class TaskView(APIView):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    def patch(self, request, pk, format=None):
+        instance = get_object_or_404(Task, pk=pk)
+        print(instance)
+        serializer = TaskSerializer(instance, data=request.data, partial=True, context={'request': request})
+        print(serializer.is_valid())
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
     def delete(self, request, pk, format=None):
         instance = get_object_or_404(Task, pk=pk)
         instance.delete()
