@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'Rafael.pythonanywhere.com',
     'localhost',
-    '127.0.0.1'
+    '127.0.0.1' 
 ]
 
 
