@@ -12,21 +12,6 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.id} {self.name} {self.color}'
 
-class Subtask(models.Model):
-    STATUS_CHOICES = [
-        ("C", "Checked"),
-        ("U", "Unchecked"),
-    ]
-    # task = models.ForeignKey(Task, related_name='subtasks', on_delete=models.PROTECT)
-    title = models.CharField(max_length=100, default='')
-    description = models.CharField(max_length=400, default='')
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="U")
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='author')
-
-    def __str__(self):
-        return f'{self.id} {self.title}'
-    
-
 class Task(models.Model):
     PRIORITY_CHOICES = [
         ("L", "Low"),
@@ -42,7 +27,7 @@ class Task(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='author'
+        related_name='tasks'
     )
     title = models.CharField(max_length=30)
     description = models.CharField(max_length=200)   
@@ -52,12 +37,23 @@ class Task(models.Model):
     prio = models.CharField(max_length=1, choices=PRIORITY_CHOICES, default="L")
     status = models.CharField(max_length=8, choices=STATUS_CHOICES, default="TODO")
     category = models.ForeignKey(Category, related_name='tasks', on_delete=models.PROTECT, null=True, blank=True)
-    subtasks = models.ManyToManyField(Subtask, blank=True)
 
     def __str__(self):
         return f'{self.id}: {self.title}'
 
+class Subtask(models.Model):
+    STATUS_CHOICES = [
+        ("C", "Checked"),
+        ("U", "Unchecked"),
+    ]
+    task = models.ForeignKey(Task, related_name='subtasks', on_delete=models.CASCADE)
+    title = models.CharField(max_length=100, default='')
+    description = models.CharField(max_length=400, default='')
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="U")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='subtasks_author')
 
+    def __str__(self):
+        return f'{self.id} {self.title}'
 
     
 class Contact(models.Model):
