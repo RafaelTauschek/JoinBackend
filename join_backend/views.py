@@ -73,7 +73,7 @@ class SubtaskView(APIView):
     def post(self, request, format=None):
         serializer = SubtaskSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            serializer.save(author=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
