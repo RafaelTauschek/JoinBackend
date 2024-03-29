@@ -37,7 +37,7 @@ class TaskView(APIView):
         serializer = TaskSerializer(instance, data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def patch(self, request, pk, format=None):
@@ -46,7 +46,7 @@ class TaskView(APIView):
         print(serializer.is_valid())
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, pk, format=None):
@@ -81,20 +81,20 @@ class SubtaskView(APIView):
         serializer = SubtaskSerializer(instance, data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         instance = get_object_or_404(Subtask, pk=pk)
         instance.delete()
-        return Response(stauts=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
     def patch(self, request, pk, format=None):
         instance = get_object_or_404(Subtask, pk=pk)
         serializer = SubtaskSerializer(instance, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             serializer.save(author=request.user)
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED);
+            return Response(serializer.data, status=status.HTTP_200_OK);
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
@@ -187,10 +187,10 @@ class RegisterView(APIView):
         password = request.data.get('password')
         
         if not username or not password:
-            return Response({'error': 'Username and password are required'}, stauts=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
         
         if User.objects.filter(username=username).exists():
-            return Response({'error': 'This username is already taken'}, stauts=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'This username is already taken'}, status=status.HTTP_400_BAD_REQUEST)
         
         user = User.objects.create_user(username=username, password=password)
         token, created = Token.objects.get_or_create(user=user)
