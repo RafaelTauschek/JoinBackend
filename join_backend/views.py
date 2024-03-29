@@ -94,7 +94,7 @@ class SubtaskView(APIView):
         serializer = SubtaskSerializer(instance, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             serializer.save(author=request.user)
-            return Response(serializer.data, stauts=status.HTTP_202_ACCEPTED);
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED);
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
