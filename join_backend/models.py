@@ -48,7 +48,6 @@ class Subtask(models.Model):
     ]
     task = models.ForeignKey(Task, related_name='subtasks', on_delete=models.CASCADE)
     title = models.CharField(max_length=100, default='')
-    description = models.CharField(max_length=400, default='')
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="U")
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='subtasks_author')
 

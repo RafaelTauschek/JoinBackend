@@ -89,6 +89,14 @@ class SubtaskView(APIView):
         instance = get_object_or_404(Subtask, pk=pk)
         instance.delete()
         return Response(stauts=status.HTTP_204_NO_CONTENT)
+    
+    def patch(self, request, pk, format=None):
+        instance = get_object_or_404(Subtask, pk=pk)
+        serializer = SubtaskSerializer(instance, data=request.data, context={'request': request})
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(author=request.user)
+            return Response(serializer.data, stauts=status.HTTP_202_ACCEPTED);
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 
