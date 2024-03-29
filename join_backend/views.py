@@ -42,7 +42,6 @@ class TaskView(APIView):
     
     def patch(self, request, pk, format=None):
         instance = get_object_or_404(Task, pk=pk)
-        print(instance)
         serializer = TaskSerializer(instance, data=request.data, partial=True, context={'request': request})
         print(serializer.is_valid())
         if serializer.is_valid(raise_exception=True):
@@ -92,7 +91,7 @@ class SubtaskView(APIView):
     
     def patch(self, request, pk, format=None):
         instance = get_object_or_404(Subtask, pk=pk)
-        serializer = SubtaskSerializer(instance, data=request.data, context={'request': request})
+        serializer = SubtaskSerializer(instance, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             serializer.save(author=request.user)
             return Response(serializer.data, stauts=status.HTTP_202_ACCEPTED);
