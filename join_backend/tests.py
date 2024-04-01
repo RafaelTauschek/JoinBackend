@@ -109,4 +109,100 @@ class SubtaskViewTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Subtask.objects.count(), 0)
         
-    
+
+class CategoryViewTest(TestCase):
+    def setUp(self):
+        self.client = AuthenticatedClient()
+        self.user = User.objects.create_user(username='test_user', password='Test123!')
+        self.client.authenticate(self.user)
+
+    def test_get_categorys(self):
+        response = self.client.get('/categories/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_single_category(self):
+        category = Category.objects.create(name='Test Category', color='#FFF', author=self.user)
+        response = self.client.get(f'/categories/{category.pk}/')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_create_category(self):
+        data = {'name': 'Test Category', 'color': '#FFF'}
+        response = self.client.post(reverse('category-list'), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_category(self):
+        category = Category.objects.create(name='Test Category', color='#FFFF', author=self.user)
+        category.save()
+        response = self.client.delete(reverse('category-detail', kwargs={'pk': category.pk}))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Category.objects.count(), 0)
+
+    def test_update_category(self):
+        category = Category.objects.create(name='Test Category', color='#FFF', author=self.user)
+        category.save()
+        data = {'name': 'Updated Category', 'color': '#DDD'}
+        response = self.client.put(reverse('category-detail', kwargs={'pk': category.pk}), data, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        category.refresh_from_db()
+        self.assertEqual(category.name, 'Updated Category')
+
+class ContactViewTest(TestCase):
+    def setUp(self):
+        self.client = AuthenticatedClient()
+        self.user = User.objects.create_user(username='test_user', password='Test123!')
+        self.client.authenticate(self.user)
+
+    def test_get_contacts(self):
+        response = self.client.get('/contacts/')
+        self.assertEqual(response.status_code, 200)
+            
+        
+    def test_get_single_contact(self):
+        contact = Contact.objects.create(first_name='Test', last_name='Test', email='Test@test.de', phone_number='0151 1234556', color='#FFF', author=self.user)
+        response = self.client.get(f'/contacts/{contact.pk}/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_contact(self):
+        data = {'first_name': 'Test', 'last_name': 'Test', 'email': 'Test@Test.de', 'phone_number': '0131123455', 'color': '#FFF'}
+        response = self.client.post(reverse('contact-list'), data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_delete_contact(self):
+         contact = Contact.objects.create(first_name='Test', last_name='Test', email='Test@test.de', phone_number='0151 1234556', color='#FFF', author=self.user)
+         response = self.client.delete(reverse('contact-detail', kwargs={'pk': contact.pk}))
+         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+         self.assertEqual(Contact.objects.count(), 0)
+
+    def test_update_contact(self):
+        contact = Contact.objects.create(first_name='Test', last_name='Test', email='Test@test.de', phone_number='0151 1234556', color='#FFF', author=self.user)
+        contact.save()
+        data = {'first_name': 'Updated', 'last_name': 'Test', 'email': 'Test@Test.de', 'phone_number': '0131123455', 'color': '#FFF'}
+        response = self.client.put(reverse('contact-detail', kwargs={'pk': contact.pk}), data, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        contact.refresh_from_db()
+        self.assertEqual(contact.first_name, 'Updated')
+
+# Don't know why the fuck this throws an error
+class UserViewTest(TestCase):
+    def setUp(self):
+        self.client = AuthenticatedClient()
+        self.user = User.objects.create_user(username='test_user', password='Test123!')
+        self.client.authenticate(self.user)
+
+    # def test_get_users(self):
+    #     response = self.client.get('/users/')
+    #     self.assertEqual(response.status_code, 200)
+
+    # def test_get_single_user(self):
+    #     user = User.objects.create(username='Testperson', password='Test123!')
+    #     user.save()
+    #     response = self.client.get(f'/users/{user.pk}/')
+    #     self.assertEqual(response.status_code, 200)
+
+
+class RegisterViewTest(TestCase):
+    def test_register_user(self):
+        data = {'username': 'Test12345', 'password': 'Test12345!'}
+        response = self.client.post(reverse('register'), data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)

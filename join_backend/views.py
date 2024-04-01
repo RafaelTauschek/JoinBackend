@@ -105,7 +105,7 @@ class CategoryView(APIView):
         
         def get(self, request, pk=None, format=None):
             if pk:
-                category = get_object_or_404(Contact, pk=pk, author=request.user)
+                category = get_object_or_404(Category, pk=pk)
                 serializer = CategorySerializer(category)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
@@ -125,7 +125,7 @@ class CategoryView(APIView):
             serializer = CategorySerializer(instance, data=request.data, context={"request": request})
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         def delete(self, request, pk, format=None):
@@ -162,7 +162,7 @@ class ContactView(APIView):
         serializer = ContactSerializer(instance, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     def delete(self, request, pk, format=None):
@@ -205,7 +205,7 @@ class UserView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     
-    def get(self, requerst, pk=None, format=None):
+    def get(self, request, pk=None, format=None):
         if pk:
             user = get_object_or_404(User, pk=pk)
             serializer = UserSerializer(user)
