@@ -190,15 +190,15 @@ class UserViewTest(TestCase):
         self.user = User.objects.create_user(username='test_user', password='Test123!')
         self.client.authenticate(self.user)
 
-    # def test_get_users(self):
-    #     response = self.client.get('/users/')
-    #     self.assertEqual(response.status_code, 200)
+    def test_get_users(self):
+        response = self.client.get('/users/')
+        self.assertEqual(response.status_code, 200)
 
-    # def test_get_single_user(self):
-    #     user = User.objects.create(username='Testperson', password='Test123!')
-    #     user.save()
-    #     response = self.client.get(f'/users/{user.pk}/')
-    #     self.assertEqual(response.status_code, 200)
+    def test_get_single_user(self):
+        user = User.objects.create(username='Testperson', password='Test123!')
+        user.save()
+        response = self.client.get(f'/users/{user.pk}/')
+        self.assertEqual(response.status_code, 200)
 
 
 class RegisterViewTest(TestCase):
