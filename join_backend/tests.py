@@ -183,7 +183,6 @@ class ContactViewTest(TestCase):
         contact.refresh_from_db()
         self.assertEqual(contact.first_name, 'Updated')
 
-# Don't know why the fuck this throws an error
 class UserViewTest(TestCase):
     def setUp(self):
         self.client = AuthenticatedClient()
